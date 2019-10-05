@@ -23,7 +23,7 @@ if sys.argv[1] == "train":
         random_win = 0
         nn_win = 0
 
-        for i in range(100):
+        for i in range(50):
             if i % 2 == 0:
                 g = Game(player, p2)
                 result = g.play()
@@ -34,7 +34,6 @@ if sys.argv[1] == "train":
                     nn_win += 1
                 else:
                     random_win += 1
-                    break
             else:
                 g = Game(p2, player)
 
@@ -44,7 +43,8 @@ if sys.argv[1] == "train":
                     draw += 1
                 elif result == 1:
                     random_win += 1
-                    break
                 else:
                     nn_win += 1
+            if random_win >= 5:
+                break
         print(nn_win, draw, random_win)
