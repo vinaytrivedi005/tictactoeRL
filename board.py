@@ -1,4 +1,5 @@
 import math
+import copy
 
 
 class Board:
@@ -116,9 +117,11 @@ class Board:
 
     def get_possible_moves(self):
         empty_positions = []
-        for i in range(0, 9):
-            if (self.X & int(math.pow(2, i))) == 0 and (self.O & int(math.pow(2, i))) == 0:
-                empty_positions.append(i+1)
+
+        if self.evaluate() == 2:
+            for i in range(0, 9):
+                if (self.X & int(math.pow(2, i))) == 0 and (self.O & int(math.pow(2, i))) == 0:
+                    empty_positions.append(i+1)
 
         return empty_positions
 
@@ -144,6 +147,81 @@ class Board:
         if (self.X & int(math.pow(2, position))) == 0 and (self.O & int(math.pow(2, position))) == 0:
             return True
         return False
+
+
+class UBoard:
+
+    def __init__(self, X, O):
+        self.super_board = Board(X, O)
+        self.sub_boards = self.__create_sub_boards(X, O)
+        self.moves = []
+
+    @staticmethod
+    def __create_sub_boards(X, O):
+        boards = {}
+        for i in range(9):
+            b = Board(X, O)
+            boards[i] = b
+        return boards
+
+    def insert_x(self, position):
+        board, board_id, move = self.__get_board(position - 1)
+        board.insert_x(move)
+        self.moves.append(position - 1)
+        if board.evaluate() == 1:
+            self.super_board.insert_x(board_id + 1)
+
+    def insert_o(self, position):
+        board, board_id, move = self.__get_board(position - 1)
+        board.insert_o(move)
+        self.moves.append(position - 1)
+        if board.evaluate() == -1:
+            self.super_board.insert_o(board_id + 1)
+
+    def __get_board(self, position):
+        board_id = position // 9
+        board = self.sub_boards[board_id]
+        return board, board_id, position % 9
+
+    def evaluate(self):
+        if self.super_board.evaluate() != 2:
+            return self.super_board.evaluate()
+        elif len(self.get_possible_moves()) == 0:
+            return 0
+        else:
+            return 2
+
+    def get_possible_moves(self):
+        empty_positions = []
+
+        if self.super_board.evaluate() == 2:
+            last_move = self.moves[-1]
+            board_id = last_move % 9
+            board_to_move = self.sub_boards[board_id]
+            if board_to_move.evaluate() == 2:
+                empty_positions = [board_id*9 + move for move in board_to_move.get_possible_moves()]
+            else:
+                for board_id in self.sub_boards.keys():
+                    empty_positions = [board_id*9 + move for move in self.sub_boards[board_id].get_possible_moves()]
+
+        return empty_positions
+
+    def deep_copy(self):
+        return copy.deepcopy(self)
+
+    def get_binary_board(self, player):
+        pass
+
+    def get_next_board_states(self, move):
+        pass
+
+    def __is_valid_move(self, position):
+        pass
+
+
+
+
+
 
 
 # b = Board()
