@@ -1,5 +1,4 @@
 import math
-import copy
 
 
 class Board:
@@ -10,11 +9,11 @@ class Board:
         self.winning_positions = [7, 56, 73, 84, 146, 273, 292, 448]
 
     def insert_x(self, position):
-        if self.__is_valid_move(position - 1):
+        if self.is_valid_move(position - 1):
             self.X += int(math.pow(2, position - 1))
 
     def insert_o(self, position):
-        if self.__is_valid_move(position - 1):
+        if self.is_valid_move(position - 1):
             self.O += int(math.pow(2, position - 1))
 
     def evaluate(self):
@@ -143,29 +142,83 @@ class Board:
 
         return next_board_states
 
-    def __is_valid_move(self, position):
+    def is_valid_move(self, position):
         if (self.X & int(math.pow(2, position))) == 0 and (self.O & int(math.pow(2, position))) == 0:
             return True
         return False
 
 
 class UBoard:
+    """
+    Board of this game looks like below:
 
-    def __init__(self, X, O):
-        self.super_board = Board(X, O)
-        self.sub_boards = self.__create_sub_boards(X, O)
-        self.moves = []
+     81| 80| 79| 78| 77| 76| 75| 74| 73
+    ---|---|---|---|---|---|---|---|---
+     72| 71| 70| 69| 68| 67| 66| 65| 64
+    ---|---|---|---|---|---|---|---|---
+     63| 62| 61| 60| 59| 58| 57| 56| 55
+    ---|---|---|---|---|---|---|---|---
+     54| 53| 52| 51| 50| 49| 48| 47| 46
+    ---|---|---|---|---|---|---|---|---
+     45| 44| 43| 42| 41| 40| 39| 38| 37
+    ---|---|---|---|---|---|---|---|---
+     36| 35| 34| 33| 32| 31| 30| 29| 28
+    ---|---|---|---|---|---|---|---|---
+     27| 26| 25| 24| 23| 22| 21| 20| 19
+    ---|---|---|---|---|---|---|---|---
+     18| 17| 16| 15| 14| 13| 12| 11| 10
+    ---|---|---|---|---|---|---|---|---
+     9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1
+
+     81| 80| 79| 78| 77| 76|
+    ---|---|---|---|---|---|
+     72| 71| 70| 69| 68| 67|    8
+    ---|---|---|---|---|---|
+     63| 62| 61|           |
+    ---|---|---|---|---|---|---|---|---
+               |           |
+               |           |
+         6     |     5     |    4
+               |           |
+               |           |
+    ---|---|---|---|---|---|---|---|---
+               |           |
+               |           |
+         3     |     2     |    1
+               |           |
+               |           |
+
+
+    """
+
+    def __init__(self, moves):
+        self.moves = moves
+        self.super_board = Board(0, 0)
+        self.sub_boards = self.__create_sub_boards()
+        self.__reach_position(moves)
 
     @staticmethod
-    def __create_sub_boards(X, O):
+    def __create_sub_boards():
         boards = {}
         for i in range(9):
-            b = Board(X, O)
+            b = Board(0, 0)
             boards[i] = b
+
         return boards
+
+    def __reach_position(self, moves):
+        for i in range(len(moves)):
+            if i % 2 == 0:
+                self.insert_x(moves[i])
+            else:
+                self.insert_o(moves[i])
 
     def insert_x(self, position):
         board, board_id, move = self.__get_board(position - 1)
+
+        if not self.is_valid_move(board, move):
+            return
+
         board.insert_x(move)
         self.moves.append(position - 1)
         if board.evaluate() == 1:
@@ -173,15 +226,33 @@ class UBoard:
 
     def insert_o(self, position):
         board, board_id, move = self.__get_board(position - 1)
+
+        if not self.is_valid_move(board, move):
+            return
+
         board.insert_o(move)
         self.moves.append(position - 1)
         if board.evaluate() == -1:
             self.super_board.insert_o(board_id + 1)
 
     def __get_board(self, position):
-        board_id = position // 9
+        board_col = position % 9
+        board_row = position % 27
+        board_id = UBoard.__ternary_to_decimal(str(board_row) + str(board_col))
+        position_col = position % 3
+        position_row = (position % 9) % 3
+        position = UBoard.__ternary_to_decimal(str(position_row) + str(position_col))
         board = self.sub_boards[board_id]
-        return board, board_id, position % 9
+        return board, board_id, position
+
+    @staticmethod
+    def __ternary_to_decimal(ternary_num):
+        power = 0
+        decimal_num = 0
+        for i in range(len(ternary_num)-1, -1, -1):
+            decimal_num += int(ternary_num[i]) * math.pow(3, power)
+            power += 1
+        return decimal_num
 
     def evaluate(self):
         if self.super_board.evaluate() != 2:
@@ -207,21 +278,65 @@ class UBoard:
         return empty_positions
 
     def deep_copy(self):
-        return copy.deepcopy(self)
+        b = UBoard(self.moves)
+        return b
 
     def get_binary_board(self, player):
-        pass
+        board = []
+        row = []
+
+        for position in range(80, -1, -1):
+            cell = []
+
+            if player == 'X':
+                board, board_id, move = self.__get_board(position)
+                if (board.X & int(math.pow(2, move))) == 0:
+                    cell.append(0)
+                else:
+                    cell.append(1)
+
+                if (board.O & int(math.pow(2, move))) == 0:
+                    cell.append(0)
+                else:
+                    cell.append(1)
+
+            if player == 'O':
+                board, board_id, move = self.__get_board(position)
+
+                if (board.O & int(math.pow(2, move))) == 0:
+                    cell.append(0)
+                else:
+                    cell.append(1)
+
+                if (board.X & int(math.pow(2, move))) == 0:
+                    cell.append(0)
+                else:
+                    cell.append(1)
+
+            row.append(cell)
+
+            if position % 9 == 0:
+                board.append(row)
+                row = []
+
+        return board
 
     def get_next_board_states(self, move):
-        pass
+        possible_moves = self.get_possible_moves()
+        next_board_states = []
 
-    def __is_valid_move(self, position):
-        pass
+        for possible_move in possible_moves:
+            b = self.deep_copy()
+            if move == 'X':
+                b.insert_x(possible_move)
+            else:
+                b.insert_o(possible_move)
+            next_board_states.append(b)
 
+        return next_board_states
 
-
-
-
+    def is_valid_move(self, board, move):
+        return board.is_valid_move(move)
 
 
 # b = Board()
