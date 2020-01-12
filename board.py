@@ -13,13 +13,13 @@ class Board:
         if self.is_valid_move(position - 1):
             self.X += int(math.pow(2, position - 1))
         else:
-            raise InvalidMoveException("Invalid move: " + position)
+            raise InvalidMoveException("Invalid move: " + str(position))
 
     def insert_o(self, position):
         if self.is_valid_move(position - 1):
             self.O += int(math.pow(2, position - 1))
         else:
-            raise InvalidMoveException("Invalid move: " + position)
+            raise InvalidMoveException("Invalid move: " + str(position))
 
     def evaluate(self):
 
@@ -175,11 +175,11 @@ class UBoard:
     ---|---|---|---|---|---|---|---|---
      9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1
 
-     81| 80| 79| 78| 77| 76|
+     8 | 8 | 7 | 78| 77| 76|
     ---|---|---|---|---|---|
-     72| 71| 70| 69| 68| 67|    8
+     6 | 5 | 4 | 69| 68| 67|    7
     ---|---|---|---|---|---|
-     63| 62| 61|           |
+     3 | 2 | 1 |           |
     ---|---|---|---|---|---|---|---|---
                |           |
                |           |
@@ -237,12 +237,12 @@ class UBoard:
         :return: None
         """
 
+        # check if move is valid
+        if not self.__is_valid_move(position):
+            raise InvalidMoveException("Invalid move: " + str(position))
+
         # get sub board and the move on that sub board from position. move will be between 0-8
         board, board_id, move = self.__get_board(position - 1)
-
-        # check if move is valid
-        if not UBoard.__is_valid_move(board, move):
-            raise InvalidMoveException("Invalid move: " + position)
 
         board.insert_x(move + 1)   # making the move on the sub board. Board expects move to be between 1-9.
 
@@ -260,12 +260,12 @@ class UBoard:
         :return: None
         """
 
+        # check if move is valid
+        if not self.__is_valid_move(position):
+            raise InvalidMoveException("Invalid move: " + str(position))
+
         # get sub board and the move on that sub board from position. move will be between 0-8
         board, board_id, move = self.__get_board(position - 1)
-
-        # check if move is valid
-        if not UBoard.__is_valid_move(board, move):
-            raise InvalidMoveException("Invalid move: " + position)
 
         board.insert_o(move + 1)   # making the move on the sub board. Board expects move to be between 1-9.
 
@@ -369,6 +369,7 @@ class UBoard:
 
             # if it is first move of the game then player can make move on any available square.
             if len(self.moves) == 0:
+                print("--------- moves length =0")
                 free_move = True
 
             # if it is not first move then player has to make move on the board corresponding to the square of previous
@@ -382,7 +383,9 @@ class UBoard:
 
                 # if board to move is not decisive then return possible moves on that board.
                 if board_to_move.evaluate() == 2:
-                    empty_positions = [(board_id*9 + move) + 1 for move in board_to_move.get_possible_moves()]
+                    for move in board_to_move.get_possible_moves():
+                        position = UBoard.__get_uboard_square(board_id, move)
+                        empty_positions.append(position)
 
                 # if board to move is already decided then return all possible moves on entire 9x9 board.
                 else:
@@ -390,14 +393,77 @@ class UBoard:
 
             # if the move is not restricted in any specific sub board
             if free_move:
+                print(self.sub_boards.keys())
                 for board_id in self.sub_boards.keys():
-
+                    print(self.sub_boards[board_id].evaluate(), board_id, self.sub_boards[board_id].get_possible_moves())
                     # if board is not yet decided then add all possible moves on that board.
-                    if self.sub_board[board_id].evaluate() == 2:
-                        empty_positions = [(board_id*9 + move) + 1
-                                           for move in self.sub_boards[board_id].get_possible_moves()]
+                    if self.sub_boards[board_id].evaluate() == 2:
+                        for move in self.sub_boards[board_id].get_possible_moves():
+                            position = UBoard.__get_uboard_square(board_id, move)
+                            empty_positions.append(position)
 
         return empty_positions
+
+    @staticmethod
+    def __get_uboard_square(sub_board_id, sub_board_square):
+        """
+        returns uboard square between 1-81 from sub board id and sub board square
+        :param sub_board_id: id of the sub board between 0-8
+        :param sub_board_square: square of the sub board between 0-8
+        :return: position between 1-81
+
+         81| 80| 79| 78| 77| 76| 75| 74| 73
+        ---|---|---|---|---|---|---|---|---
+         72| 71| 70| 69| 68| 67| 66| 65| 64
+        ---|---|---|---|---|---|---|---|---
+         63| 62| 61| 60| 59| 58| 57| 56| 55
+        ---|---|---|---|---|---|---|---|---
+         54| 53| 52| 51| 50| 49| 48| 47| 46
+        ---|---|---|---|---|---|---|---|---
+         45| 44| 43| 42| 41| 40| 39| 38| 37
+        ---|---|---|---|---|---|---|---|---
+         36| 35| 34| 33| 32| 31| 30| 29| 28
+        ---|---|---|---|---|---|---|---|---
+         27| 26| 25| 24| 23| 22| 21| 20| 19
+        ---|---|---|---|---|---|---|---|---
+         18| 17| 16| 15| 14| 13| 12| 11| 10
+        ---|---|---|---|---|---|---|---|---
+         9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1
+
+         9 | 8 | 7 | 78| 77| 76|
+        ---|---|---|---|---|---|
+         6 | 5 | 4 | 69| 68| 67|    7
+        ---|---|---|---|---|---|
+         3 | 2 | 1 |           |
+        ---|---|---|---|---|---|---|---|---
+                   |           |
+                   |           |
+             6     |     5     |    4
+                   |           |
+                   |           |
+        ---|---|---|---|---|---|---|---|---
+                   |           |
+                   |           |
+             3     |     2     |    1
+                   |           |
+                   |           |
+
+        """
+
+        board_division = sub_board_id // 3
+        board_position_div = board_division * 27
+
+        board_reminder = sub_board_id % 3
+        board_position_rem = board_reminder * 3
+
+        move_division = sub_board_square // 3
+        move_position_div = move_division * 9
+
+        move_reminder = sub_board_square % 3
+
+        position = board_position_div + board_position_rem + move_position_div + move_reminder
+
+        return position + 1
 
     def deep_copy(self):
         """
@@ -488,16 +554,18 @@ class UBoard:
 
         return next_board_states
 
-    @staticmethod
-    def __is_valid_move(board, move):
+    def __is_valid_move(self, position):
         """
         validates the move on the specified board.
 
-        :param board: object of Board
-        :param move: move to be made on the board object
+        :param position: move to be validated
         :return: True if move is valid, False otherwise
         """
-        return board.is_valid_move(move)
+        print(self.get_possible_moves(), position)
+        if position in self.get_possible_moves():
+            return True
+        else:
+            return False
 
 
 # b = Board()

@@ -1437,6 +1437,411 @@ class UBoardTest(unittest.TestCase):
         self.assertEqual(expected_board_id, actual_board_id)
         self.assertEqual(expected_move, actual_move)
 
+    def test_get_uboard_square0(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 0)
+        expected_output = 1
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square1(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 1)
+        expected_output = 2
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square2(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 2)
+        expected_output = 3
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square3(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 3)
+        expected_output = 10
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square4(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 4)
+        expected_output = 11
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square5(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 5)
+        expected_output = 12
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square6(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 6)
+        expected_output = 19
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square7(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 7)
+        expected_output = 20
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square8(self):
+        actual_output = UBoard._UBoard__get_uboard_square(0, 8)
+        expected_output = 21
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square9(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 0)
+        expected_output = 4
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square10(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 1)
+        expected_output = 5
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square11(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 2)
+        expected_output = 6
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square12(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 3)
+        expected_output = 13
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square13(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 4)
+        expected_output = 14
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square14(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 5)
+        expected_output = 15
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square15(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 6)
+        expected_output = 22
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square16(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 7)
+        expected_output = 23
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square17(self):
+        actual_output = UBoard._UBoard__get_uboard_square(1, 8)
+        expected_output = 24
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square18(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 0)
+        expected_output = 7
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square19(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 1)
+        expected_output = 8
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square20(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 2)
+        expected_output = 9
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square21(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 3)
+        expected_output = 16
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square22(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 4)
+        expected_output = 17
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square23(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 5)
+        expected_output = 18
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square24(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 6)
+        expected_output = 25
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square25(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 7)
+        expected_output = 26
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square26(self):
+        actual_output = UBoard._UBoard__get_uboard_square(2, 8)
+        expected_output = 27
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square27(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 0)
+        expected_output = 28
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square28(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 1)
+        expected_output = 29
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square29(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 2)
+        expected_output = 30
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square30(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 3)
+        expected_output = 37
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square31(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 4)
+        expected_output = 38
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square32(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 5)
+        expected_output = 39
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square33(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 6)
+        expected_output = 46
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square34(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 7)
+        expected_output = 47
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square35(self):
+        actual_output = UBoard._UBoard__get_uboard_square(3, 8)
+        expected_output = 48
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square36(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 0)
+        expected_output = 31
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square37(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 1)
+        expected_output = 32
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square38(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 2)
+        expected_output = 33
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square39(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 3)
+        expected_output = 40
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square40(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 4)
+        expected_output = 41
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square41(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 5)
+        expected_output = 42
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square42(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 6)
+        expected_output = 49
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square43(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 7)
+        expected_output = 50
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square44(self):
+        actual_output = UBoard._UBoard__get_uboard_square(4, 8)
+        expected_output = 51
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square45(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 0)
+        expected_output = 34
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square46(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 1)
+        expected_output = 35
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square47(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 2)
+        expected_output = 36
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square48(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 3)
+        expected_output = 43
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square49(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 4)
+        expected_output = 44
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square50(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 5)
+        expected_output = 45
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square51(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 6)
+        expected_output = 52
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square52(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 7)
+        expected_output = 53
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square53(self):
+        actual_output = UBoard._UBoard__get_uboard_square(5, 8)
+        expected_output = 54
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square54(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 0)
+        expected_output = 55
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square55(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 1)
+        expected_output = 56
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square56(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 2)
+        expected_output = 57
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square57(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 3)
+        expected_output = 64
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square58(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 4)
+        expected_output = 65
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square59(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 5)
+        expected_output = 66
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square60(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 6)
+        expected_output = 73
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square61(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 7)
+        expected_output = 74
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square62(self):
+        actual_output = UBoard._UBoard__get_uboard_square(6, 8)
+        expected_output = 75
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square63(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 0)
+        expected_output = 58
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square64(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 1)
+        expected_output = 59
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square65(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 2)
+        expected_output = 60
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square66(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 3)
+        expected_output = 67
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square67(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 4)
+        expected_output = 68
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square68(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 5)
+        expected_output = 69
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square69(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 6)
+        expected_output = 76
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square70(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 7)
+        expected_output = 77
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square71(self):
+        actual_output = UBoard._UBoard__get_uboard_square(7, 8)
+        expected_output = 78
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square72(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 0)
+        expected_output = 61
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square73(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 1)
+        expected_output = 62
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square74(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 2)
+        expected_output = 63
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square75(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 3)
+        expected_output = 70
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square76(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 4)
+        expected_output = 71
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square77(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 5)
+        expected_output = 72
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square78(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 6)
+        expected_output = 79
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square79(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 7)
+        expected_output = 80
+        self.assertEqual(expected_output, actual_output)
+
+    def test_get_uboard_square80(self):
+        actual_output = UBoard._UBoard__get_uboard_square(8, 8)
+        expected_output = 81
+        self.assertEqual(expected_output, actual_output)
+
     def test_get_binary_board0(self):
         self.maxDiff = None
         uboard = UBoard([])
@@ -1683,20 +2088,17 @@ class UBoardTest(unittest.TestCase):
 
     def test_is_valid_move0(self):
         uboard = UBoard([])
-        for i in range(81):
-            board, board_id, move = UBoard._UBoard__get_board(uboard, i)
-            is_valid_move = UBoard._UBoard__is_valid_move(board, move)
-            self.assertTrue(is_valid_move, msg=str(i))
+        for i in range(1, 82):
+            is_valid = UBoard._UBoard__is_valid_move(uboard, i)
+            self.assertTrue(is_valid, msg=str(i))
 
         uboard.insert_x(1)
-        for i in range(81):
-            board, board_id, move = UBoard._UBoard__get_board(uboard, i)
-            is_valid_move = UBoard._UBoard__is_valid_move(board, move)
-            if i not in [1, 2, 9, 10, 11, 18, 19, 20]:
-                self.assertFalse(is_valid_move, msg=str(i))
+        for i in range(1, 82):
+            is_valid = UBoard._UBoard__is_valid_move(uboard, i)
+            if i not in [2, 3, 10, 11, 12, 19, 20, 21]:
+                self.assertFalse(is_valid, msg=str(i))
             else:
-                self.assertTrue(is_valid_move, msg=str(i))
-
+                self.assertTrue(is_valid, msg=str(i))
 
 
 if __name__ == '__main__':
