@@ -26,8 +26,9 @@ class NNPlayer(Player):
 
     epochs = 0
 
-    def __init__(self, name, model_path):
+    def __init__(self, name, game_name, model_path):
         self.name = name
+        self.game_name = game_name
         self.model_path = model_path
         if os.path.isfile(model_path):
             self.model = load_model(model_path,
@@ -59,23 +60,52 @@ class NNPlayer(Player):
         self.O_true = []
 
     def __create_model(self):
-        self.model = Sequential()
+        if self.game_name == 'TTT':
+            self.model = Sequential()
 
-        # Pre-processing data
-        self.model.add(Lambda(lambda x: x / 1.0 - 0.5, input_shape=(3, 3, 2)))
+            # Pre-processing data
+            self.model.add(Lambda(lambda x: x / 1.0 - 0.5, input_shape=(3, 3, 2)))
 
-        # Layer 1: convolution layer, input 65 x 320 x 3, output 63 x 318 x 32
-        # model.add(Convolution2D(24, 5, 5, subsample=(2,2),activation="relu"))
-        self.model.add(Convolution2D(9, 3, 3, activation="relu"))
+            # Layer 1: convolution layer, input 65 x 320 x 3, output 63 x 318 x 32
+            # model.add(Convolution2D(24, 5, 5, subsample=(2,2),activation="relu"))
+            self.model.add(Convolution2D(9, (3, 3), activation="relu"))
 
-        self.model.add(Flatten())
+            self.model.add(Flatten())
 
-        self.model.add(Dense(3))
-        self.model.add(Activation("relu"))
-        self.model.add(Dropout(0.2))
+            self.model.add(Dense(3))
+            self.model.add(Activation("relu"))
+            self.model.add(Dropout(0.2))
 
-        self.model.add(Dense(1))
-        self.model.compile(loss='mse', optimizer='adam')
+            self.model.add(Dense(1))
+            self.model.compile(loss='mse', optimizer='adam')
+
+        if self.game_name == 'UTTT':
+            self.model = Sequential()
+
+            # Pre-processing data
+            self.model.add(Lambda(lambda x: x / 1.0 - 0.5, input_shape=(9, 9, 2)))
+
+            # Layer 1: convolution layer, input 9 x 9 x 2, output 7 x 7 x 9
+            self.model.add(Convolution2D(9, (3, 3), activation="relu", strides=(1, 1), padding='valid'))
+
+            # Layer 1: convolution layer, input 7 x 7 x 9, output 5 x 5 x 27
+            self.model.add(Convolution2D(27, (3, 3), activation="relu", strides=(1, 1), padding='valid'))
+
+            # Layer 1: convolution layer, input 5 x 5 x 27, output 3 x 3 x 81
+            self.model.add(Convolution2D(81, (3, 3), activation="relu", strides=(1, 1), padding='valid'))
+
+            self.model.add(Flatten())
+
+            self.model.add(Dense(100))
+            self.model.add(Activation("relu"))
+            self.model.add(Dropout(0.2))
+
+            self.model.add(Dense(10))
+            self.model.add(Activation("relu"))
+            self.model.add(Dropout(0.2))
+
+            self.model.add(Dense(1))
+            self.model.compile(loss='mse', optimizer='adam')
 
     def train(self, result):
 
@@ -140,7 +170,7 @@ class NNPlayer(Player):
         if self.is_training and r < self.alpha:
             move_index = random.randint(0, len(possible_moves) - 1)
         else:
-            score, move_index = self.__minimax(0, [game.get_board()], 0, True, 3, game, game.turn, game.turn)
+            score, move_index = self.__minimax(0, [game.get_board()], 0, True, 1, game, game.turn, game.turn)
 
         return possible_moves[move_index]
 

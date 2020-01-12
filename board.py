@@ -1,4 +1,5 @@
 import math
+from ttt_exceptions import InvalidMoveException
 
 
 class Board:
@@ -11,10 +12,14 @@ class Board:
     def insert_x(self, position):
         if self.is_valid_move(position - 1):
             self.X += int(math.pow(2, position - 1))
+        else:
+            raise InvalidMoveException("Invalid move: " + position)
 
     def insert_o(self, position):
         if self.is_valid_move(position - 1):
             self.O += int(math.pow(2, position - 1))
+        else:
+            raise InvalidMoveException("Invalid move: " + position)
 
     def evaluate(self):
 
@@ -199,6 +204,11 @@ class UBoard:
 
     @staticmethod
     def __create_sub_boards():
+        """
+        creates 9 sub boards of 3x3 using Board class.
+
+        :return: dictionary of sub boards mapped with id 0-8
+        """
         boards = {}
         for i in range(9):
             b = Board(0, 0)
@@ -207,6 +217,12 @@ class UBoard:
         return boards
 
     def __reach_position(self, moves):
+        """
+        makes the initials moves to reached the position in case UBoard is initialized with non empty moves.
+
+        :param moves: list of moves already made before initializing board.
+        :return: None
+        """
         for i in range(len(moves)):
             if i % 2 == 0:
                 self.insert_x(moves[i])
@@ -214,75 +230,192 @@ class UBoard:
                 self.insert_o(moves[i])
 
     def insert_x(self, position):
+        """
+        inserts move at specified position. position is between 1-81
+
+        :param position: integer value between 1-81
+        :return: None
+        """
+
+        # get sub board and the move on that sub board from position. move will be between 0-8
         board, board_id, move = self.__get_board(position - 1)
 
-        if not self.is_valid_move(board, move):
-            return
+        # check if move is valid
+        if not UBoard.__is_valid_move(board, move):
+            raise InvalidMoveException("Invalid move: " + position)
 
-        board.insert_x(move)
-        self.moves.append(position - 1)
+        board.insert_x(move + 1)   # making the move on the sub board. Board expects move to be between 1-9.
+
+        self.moves.append(position)
+
+        # if sub board is won with the move then make entry in the position of super board.
         if board.evaluate() == 1:
-            self.super_board.insert_x(board_id + 1)
+            self.super_board.insert_x(board_id + 1)   # Board expects move to be between 1-9 and board_id is between 0-8
 
     def insert_o(self, position):
+        """
+        inserts move at specified position. position is between 1-81
+
+        :param position: integer value between 1-81
+        :return: None
+        """
+
+        # get sub board and the move on that sub board from position. move will be between 0-8
         board, board_id, move = self.__get_board(position - 1)
 
-        if not self.is_valid_move(board, move):
-            return
+        # check if move is valid
+        if not UBoard.__is_valid_move(board, move):
+            raise InvalidMoveException("Invalid move: " + position)
 
-        board.insert_o(move)
-        self.moves.append(position - 1)
+        board.insert_o(move + 1)   # making the move on the sub board. Board expects move to be between 1-9.
+
+        self.moves.append(position)
+
+        # if sub board is won with the move then make entry in the position of super board.
         if board.evaluate() == -1:
-            self.super_board.insert_o(board_id + 1)
+            self.super_board.insert_o(board_id + 1)   # Board expects move to be between 1-9 and board_id is between 0-8
 
     def __get_board(self, position):
-        board_col = position % 9
-        board_row = position % 27
-        board_id = UBoard.__ternary_to_decimal(str(board_row) + str(board_col))
-        position_col = position % 3
-        position_row = (position % 9) % 3
-        position = UBoard.__ternary_to_decimal(str(position_row) + str(position_col))
+        """
+        returns board, board_id and move from the position.
+
+        :param position: integer value between 0-80
+        :return: board object, board_id[0-8] and move[0-8]
+        """
+        board_id = UBoard.__get_super_board_square(position)  # get sub board id from position
+        position = UBoard. __get_sub_board_square(position)   # get sub board square from position
         board = self.sub_boards[board_id]
         return board, board_id, position
 
     @staticmethod
+    def __get_super_board_square(position):
+        """
+        returns sub board id from position.
+
+        :param position: int between 0-80
+        :return: sub board id[0-8] on which move has to be made.
+        """
+
+        # column of the sub board between 0-2
+        board_col = (position % 9) // 3
+
+        # row of the sub board between 0-2
+        board_row = (position // 9) // 3
+
+        return UBoard.__ternary_to_decimal(str(board_row) + str(board_col))
+
+    @staticmethod
+    def __get_sub_board_square(position):
+        """
+        returns square of sub board on which move has to be made.
+
+        :param position: int value between 0-80
+        :return: square on which move has to be made on sub board between 0-8.
+        """
+
+        # column of the sub board square between 0-2
+        position_col = position % 3
+
+        # row of the sub board square between 0-2
+        position_row = (position // 9) % 3
+
+        return UBoard.__ternary_to_decimal(str(position_row) + str(position_col))
+
+    @staticmethod
     def __ternary_to_decimal(ternary_num):
+        """
+        converts turnary number to decimal.
+
+        :param ternary_num: string containing turnary number value with digits between 0-2
+        :return: int with corresponding decimal value.
+        """
+
         power = 0
         decimal_num = 0
+
         for i in range(len(ternary_num)-1, -1, -1):
             decimal_num += int(ternary_num[i]) * math.pow(3, power)
             power += 1
-        return decimal_num
+        return int(decimal_num)
 
     def evaluate(self):
+        """
+        evaluating the current board position.
+
+        :return: 1 if X wins, -1 if O wins, 0 if draw and 2 if game still undecided.
+        """
+
+        # if super board is decisive
         if self.super_board.evaluate() != 2:
             return self.super_board.evaluate()
-        elif len(self.get_possible_moves()) == 0:
+
+        # if no possible moves to make
+        if len(self.get_possible_moves()) == 0:
             return 0
-        else:
-            return 2
+
+        return 2
 
     def get_possible_moves(self):
+        """
+        returns the list of possible moves.
+
+        :return: list of integers between 1-81 which are possible moves on the board given current state.
+        """
         empty_positions = []
 
+        # if super board is not decisive
         if self.super_board.evaluate() == 2:
-            last_move = self.moves[-1]
-            board_id = last_move % 9
-            board_to_move = self.sub_boards[board_id]
-            if board_to_move.evaluate() == 2:
-                empty_positions = [board_id*9 + move for move in board_to_move.get_possible_moves()]
+            free_move = False
+
+            # if it is first move of the game then player can make move on any available square.
+            if len(self.moves) == 0:
+                free_move = True
+
+            # if it is not first move then player has to make move on the board corresponding to the square of previous
+            # move.
             else:
+                last_move = self.moves[-1]  # get the last move of the game.
+
+                # sub board square on which last move is made will be the board id on which next move has to be made.
+                board_id = UBoard.__get_sub_board_square(last_move - 1)
+                board_to_move = self.sub_boards[board_id]
+
+                # if board to move is not decisive then return possible moves on that board.
+                if board_to_move.evaluate() == 2:
+                    empty_positions = [(board_id*9 + move) + 1 for move in board_to_move.get_possible_moves()]
+
+                # if board to move is already decided then return all possible moves on entire 9x9 board.
+                else:
+                    free_move = True
+
+            # if the move is not restricted in any specific sub board
+            if free_move:
                 for board_id in self.sub_boards.keys():
-                    empty_positions = [board_id*9 + move for move in self.sub_boards[board_id].get_possible_moves()]
+
+                    # if board is not yet decided then add all possible moves on that board.
+                    if self.sub_board[board_id].evaluate() == 2:
+                        empty_positions = [(board_id*9 + move) + 1
+                                           for move in self.sub_boards[board_id].get_possible_moves()]
 
         return empty_positions
 
     def deep_copy(self):
+        """
+        deep copy the current UBoard object.
+
+        :return: replica of UBoard object.
+        """
         b = UBoard(self.moves)
         return b
 
     def get_binary_board(self, player):
-        board = []
+        """
+        return 9x9x2 binary board from the reference of specified player.
+
+        :param player: player on whose reference binary board has to be created.
+        :return: 9x9x2 binary board
+        """
+        b = []
         row = []
 
         for position in range(80, -1, -1):
@@ -290,44 +423,64 @@ class UBoard:
 
             if player == 'X':
                 board, board_id, move = self.__get_board(position)
+
+                # if board doesn't have x on the specified move position
                 if (board.X & int(math.pow(2, move))) == 0:
                     cell.append(0)
+
+                # if board does have x on the specified move position
                 else:
                     cell.append(1)
 
+                # if board doesn't have o on the specified move position
                 if (board.O & int(math.pow(2, move))) == 0:
                     cell.append(0)
+
+                # if board does have o on the specified move position
                 else:
                     cell.append(1)
 
             if player == 'O':
                 board, board_id, move = self.__get_board(position)
 
+                # if board doesn't have o on the specified move position
                 if (board.O & int(math.pow(2, move))) == 0:
                     cell.append(0)
+
+                # if board does have o on the specified move position
                 else:
                     cell.append(1)
 
+                # if board doesn't have x on the specified move position
                 if (board.X & int(math.pow(2, move))) == 0:
                     cell.append(0)
+
+                # if board does have x on the specified move position
                 else:
                     cell.append(1)
 
             row.append(cell)
 
             if position % 9 == 0:
-                board.append(row)
+                b.append(row)
                 row = []
 
-        return board
+        return b
 
-    def get_next_board_states(self, move):
+    def get_next_board_states(self, player):
+        """
+        returns all possible next board states for the specified player.
+
+        :param player: player for with next board states are requested.
+        :return: array of board states
+        """
+
         possible_moves = self.get_possible_moves()
         next_board_states = []
 
         for possible_move in possible_moves:
             b = self.deep_copy()
-            if move == 'X':
+            if player == 'X':
                 b.insert_x(possible_move)
             else:
                 b.insert_o(possible_move)
@@ -335,7 +488,15 @@ class UBoard:
 
         return next_board_states
 
-    def is_valid_move(self, board, move):
+    @staticmethod
+    def __is_valid_move(board, move):
+        """
+        validates the move on the specified board.
+
+        :param board: object of Board
+        :param move: move to be made on the board object
+        :return: True if move is valid, False otherwise
+        """
         return board.is_valid_move(move)
 
 

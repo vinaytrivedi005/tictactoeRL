@@ -1,10 +1,10 @@
 from player import RandomPlayer, NNPlayer
 from game import Game
-from board import Board
+from board import Board, UBoard
 import time
 
 
-player = NNPlayer("nn1", './models/model.tf')
+player = NNPlayer("nn1", 'UTTT', './models/uttt_model.tf')
 p2 = RandomPlayer("r1")
 
 nn_win = 0
@@ -17,7 +17,7 @@ while random_win > 0:
     for i in range(100):
         game_number += 1
         print("game #", game_number)
-        board = Board(0, 0)
+        board = UBoard([])
         player.set_is_training(True)
         g = Game(board, player, player)
         result = g.play()
@@ -30,7 +30,7 @@ while random_win > 0:
     for i in range(50):
         player.set_is_training(False)
         if i % 2 == 0:
-            board = Board(0, 0)
+            board = UBoard([])
             g = Game(board, player, p2)
             result = g.play()
 
@@ -41,7 +41,7 @@ while random_win > 0:
             else:
                 random_win += 1
         else:
-            board = Board(0, 0)
+            board = UBoard([])
             g = Game(board, p2, player)
 
             result = g.play()
